@@ -9,11 +9,14 @@ class Pregunta {
       let elementos = document.querySelectorAll(
         `input[name="pregunta${this.indice}"]`
       );
+      let signal_color = document.querySelectorAll(`#pregunta${this.indice} label`);
       elementos.forEach((radius) => {
+        false_count += radius.checked ? 0 : 1;
+        
+        //Si el input esta activado, el label correspondiente cambiara de color si la respuesta es correcta o incorrecta
         if (radius.checked) {
-          let resultado =
-            parseInt(radius.value) == respuesta ? "Correcto" : "Incorrecto";
-          console.log(resultado);
+          signal_color[radius.value].style.color =
+            parseInt(radius.value) == respuesta ? "green" : "red";
         }
       });
     };
@@ -21,6 +24,7 @@ class Pregunta {
     this.asignacion = (id) => {
       // Creacion de elementos HTML en javascript
       const div = document.createElement("div");
+      const div_content = document.createElement("div");
       const p = document.createElement("p");
       const label0 = document.createElement("label");
       const label1 = document.createElement("label");
@@ -30,8 +34,9 @@ class Pregunta {
       const input2 = document.createElement("input");
 
       // Colocar Valores
-      p.textContent = pregunta;
+      p.textContent = `${indice + 1}) ¿${pregunta}?`;
       div.id = `pregunta${id}`;
+      div_content.className = "opciones";
 
       label0.textContent += opciones[0];
       input0.type = "radio";
@@ -49,12 +54,13 @@ class Pregunta {
       input2.value = "2";
 
       div.appendChild(p);
-      div.appendChild(label0);
-      div.appendChild(input0);
-      div.appendChild(label1);
-      div.appendChild(input1);
-      div.appendChild(label2);
-      div.appendChild(input2);
+      div.appendChild(div_content);
+      div_content.appendChild(label0);
+      div_content.appendChild(input0);
+      div_content.appendChild(label1);
+      div_content.appendChild(input1);
+      div_content.appendChild(label2);
+      div_content.appendChild(input2);
 
       const listaDePreguntasHTML = document.getElementById("listaDePreguntas"); // recupere el form
       listaDePreguntasHTML.appendChild(div);
@@ -62,8 +68,10 @@ class Pregunta {
   }
 }
 
+let Start = document.getElementById("userInfo");
+let UserName = document.getElementById("user");
+let Score = 0;
 const listaDePreguntas = [];
-
 const creadorDePreguntas = (pregunta, opciones, respuesta, indice) => {
   const clasePregunta = new Pregunta(pregunta, opciones, respuesta, indice);
   listaDePreguntas.push(clasePregunta);
@@ -94,12 +102,20 @@ creadorDePreguntas("Cuantos huesos tiene el cuerpo humano",
   4
 );
 
-const boton = () => {
+const evaluar = () => {
   for (let index = 0; index < listaDePreguntas.length; index++) {
     listaDePreguntas[index].verificacion();
   }
 };
-
+const registerName = () => {
+  Start.style.transform = "scale(0,0)";
+  Start.style.transition = "0.5s";
+  Start.style.opacity = "0";
+  let cuerpo = document.querySelector("body");
+  cuerpo.style.overflow = "visible";
+  cuerpo.style.height = "100%";
+  console.log(UserName.value);
+}
 (() => {
   for (let index = 0; index < listaDePreguntas.length; index++) {
     listaDePreguntas[index].asignacion(index);
