@@ -6,21 +6,19 @@ class Pregunta {
     this.indice = indice;
 
     this.verificacion = () => {
-      let elementos = document.querySelectorAll(
-        `input[name="pregunta${this.indice}"]`
-      );
-      let signal_color = document.querySelectorAll(`#pregunta${this.indice} label`);
-      elementos.forEach((radius) => {
-        false_count += radius.checked ? 0 : 1;
-        
-        //Si el input esta activado, el label correspondiente cambiara de color si la respuesta es correcta o incorrecta
-        if (radius.checked) {
-          signal_color[radius.value].style.color =
-            parseInt(radius.value) == respuesta ? "green" : "red";
+      let elementos = document.querySelectorAll(`input[name="pregunta${this.indice}"]`);
+      let false_count = 0;
+      for (let radio of elementos) {
+        if (radio.checked) {
+          Score += parseInt(radio.value) == respuesta ? 1 : 0;
+          false_count = 0;
+          break;
+        }else {
+          false_count++;
         }
-      });
-    };
-
+    }
+    alerts += false_count > 0 ? 1 : 0;
+  }
     this.asignacion = (id) => {
       // Creacion de elementos HTML en javascript
       const div = document.createElement("div");
@@ -64,13 +62,26 @@ class Pregunta {
 
       const listaDePreguntasHTML = document.getElementById("listaDePreguntas"); // recupere el form
       listaDePreguntasHTML.appendChild(div);
-    };
+    }; 
+    }
   }
-}
 
 let Start = document.getElementById("userInfo");
 let UserName = document.getElementById("user");
+let Name = "";
+let boton_cerrar = document.getElementsByClassName("btn-close");
+const close = () => {
+  Start.style.transform = "scale(0,0)";
+  Start.style.transition = "0.5s";
+  Start.style.opacity = "0";
+  let cuerpo = document.querySelector("body");
+  cuerpo.style.overflow = "visible";
+  cuerpo.style.height = "100%";
+}
+boton_cerrar[0].addEventListener("click",close);
+boton_cerrar[1].addEventListener("click",close);
 let Score = 0;
+let alerts = 0;
 const listaDePreguntas = [];
 const creadorDePreguntas = (pregunta, opciones, respuesta, indice) => {
   const clasePregunta = new Pregunta(pregunta, opciones, respuesta, indice);
@@ -102,20 +113,36 @@ creadorDePreguntas("Cuantos huesos tiene el cuerpo humano",
   4
 );
 
+const alertar = () => {
+  const alerta = document.getElementById("alert");
+  alerta.style.display = "block";
+  Start.style.transform = "scale(1,1)";
+  Start.style.transition = "0.5s";
+  Start.style.opacity = "1";
+  let cuerpo = document.querySelector("body");
+  cuerpo.style.overflow = "visible";
+  cuerpo.style.height = "100%";
+}
+
 const evaluar = () => {
   for (let index = 0; index < listaDePreguntas.length; index++) {
     listaDePreguntas[index].verificacion();
   }
+  if (alerts > 0) {
+    alertar();
+    alerts = 0;
+  }
 };
 const registerName = () => {
-  Start.style.transform = "scale(0,0)";
-  Start.style.transition = "0.5s";
-  Start.style.opacity = "0";
-  let cuerpo = document.querySelector("body");
-  cuerpo.style.overflow = "visible";
-  cuerpo.style.height = "100%";
-  console.log(UserName.value);
+  let Name = UserName.value;
+  let content_User = document.getElementById("usernameContent");
+  content_User.style.width = "0px";
+  content_User.style.overflow = "hidden";
+  close();
+  console.log(Name);
 }
+
+
 (() => {
   for (let index = 0; index < listaDePreguntas.length; index++) {
     listaDePreguntas[index].asignacion(index);

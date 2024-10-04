@@ -29,7 +29,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
 }
 .username-content {
     background-color: rgb(45, 1, 139);
@@ -66,6 +66,21 @@ body {
     border: solid rgb(255, 255, 255) 1px;
     border-radius: 14px;
     background: linear-gradient(rgb(4, 0, 65),rgb(42, 0, 98));
+}
+.alerta {
+    display: none;
+    background-color: rgb(45, 1, 139);
+    color: white;
+    border: solid 1px white;
+    border-radius: 14px;
+    width: 75%;
+    height: 50vh;
+}
+.alerta p {
+    text-align: center;
+    font-size: 30px;
+    width: 80%;
+    margin: 70px auto 0 auto;
 }
 .section {
     width: 100%;
@@ -118,7 +133,7 @@ form div .opciones label {
     width: 75%;
     height: 50vh;
     position: absolute;
-    display: none;
+    display: flex;
     flex-direction: column;
     background-color: rgb(45, 1, 139);
     color: white;
@@ -126,7 +141,8 @@ form div .opciones label {
     border-radius: 14px;
 
 }
-.user-message .close {
+.btn-close {
+    cursor: pointer;
     margin-left: 87%;
     position: relative;
     top: -30px;
@@ -142,11 +158,14 @@ form div .opciones label {
     cursor: pointer;
 }
 
-.user-message .close a{
+.btn-close a{
     font-size: 50px;
     color: white;
     text-decoration: none;
     font-weight: bold;
+}
+.user-message {
+    display: none;
 }
 .user-message p {
     text-align: center;
